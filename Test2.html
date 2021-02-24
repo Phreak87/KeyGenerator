@@ -53,9 +53,8 @@ this.showKey = true;
 this.showPins = true;
 this.MeasureSize = 100;
 
-this.showKeyMeasure = false;
-this.showPinMeasure = false;
- 
+this.showKeyMeasure = true ;
+
 this.Handle = 'quadratic';
 this.HandleDia = 2000;
 
@@ -106,7 +105,7 @@ this.PinDistance = 400; // P2
 //-----------------/
 
 this.PinCount = 6;
-this.PinDepthCount = 8;
+this.PinDepths = 8;
 this.PinWidth = 100; // W2
 this.PinHeight = 1; // W1 (Bezogen auf niedrigste Codierung)
 this.PinIncrease = 5; // W3
@@ -144,18 +143,8 @@ for (var i = 0; i < Object.keys(ConfigGUI.__folders).length; i++) {
 }
 }
 function ResetDefault (){
-CFG.Template  = "Default";
-CFG.CFGString = "#SL="+ CFG.ShaftLength +
-				"#SH="+ CFG.ShaftHeigth +
-				"#TH="+ CFG.TipHeigth   +
-				"#HD="+ CFG.HandleDia   +
-				"#PF="+ CFG.FirstPinPos +
-				"#PH="+ CFG.PinHeight   +
-				"#PW="+ CFG.PinWidth    +
-				"#PI="+ CFG.PinIncrease +
-				"#PD="+ CFG.PinDistance +
-				"#PC="+ CFG.PinCount;
-UpdateGUI ();
+	CFG.Template  = "Default";
+	UpdateGUI ();
 }
 function UpdateConfigSet(Text){
 	var res = Text.split("#");
@@ -178,7 +167,7 @@ UpdateGUI();
 }
 function SetTemplate (){
 		switch (CFG.Template) {
-			case "BKS"			:	UpdateConfigSet ("#SL=2750#SH=850#TH=300#HD=2000#PF=500#PH=1#PW=100#PI=4#PD=425#PC=5");break
+			case "BKS PZ88"		:	UpdateConfigSet ("#SL=2750#SH=900#TH=300#HD=2000#PF=508#PH=22.3#PW=80#PI=4#PD=419#PC=5");break
 			case "Best"			:	UpdateConfigSet ("#SL=2650#SH=810#TH=300#HD=2000#PF=205#PH=0#PW=130#PI=3.5#PD=380#PC=6");break
 			case "Arrow"		:	UpdateConfigSet ("#SL=3150#SH=850#TH=300#HD=2000#PF=673#PH=5.7#PW=152#PI=3.6#PD=394#PC=6");break;
 			case "American"		:	UpdateConfigSet ("#SL=2300#SH=720#TH=300#HD=2000#PF=400#PH=0#PW=100#PI=4#PD=317#PC=6");break;
@@ -199,7 +188,7 @@ window.onload = function() {
   ConfigGUI.add(CFG, 'MeasureSize').onChange(setValue);
 
   // "Corbin DH Z", "Corbin X", "Corbin Z", "Russwin","Weslock", "Yale"
-  ConfigGUI.add (CFG, "Template", ["Default", "BKS", "Best", "Kwikset","Schlage","Master", "American", "Arrow",  "Sargent", "Weiser",  ,"GreenteQ"]).onChange(SetTemplate);
+  ConfigGUI.add (CFG, "Template", ["Default", "BKS PZ88", "Best", "Kwikset","Schlage","Master", "American", "Arrow",  "Sargent", "Weiser",  ,"GreenteQ"]).onChange(SetTemplate);
   ConfigGUI.add (CFG, "CFGString");
 
   var SaveFolder = ConfigGUI.addFolder('Save');
@@ -216,22 +205,23 @@ window.onload = function() {
   ShaftFolder.add(CFG,'ShaftHeigth').min(1).onChange(setValue);
   ShaftFolder.add(CFG,'TipHeigth').min(1).onChange(setValue);
 
-  var PinFolder = ConfigGUI.addFolder('Pin');
+  var PinFolder = ConfigGUI.addFolder('Pins');
   PinFolder.add(CFG,'FirstPinPos').min(1).step(1).onChange(setValue);
   PinFolder.add(CFG,'PinHeight').min(0).onChange(setValue);
   PinFolder.add(CFG,'PinWidth').min(0).onChange(setValue);
-
   PinFolder.add(CFG,'PinIncrease').min(1).step(0.1).onChange(setValue);
   PinFolder.add(CFG,'PinDistance').min(1).step(1).onChange(setValue);
-
-  PinFolder.add(CFG,'PinCount').min(4).max(8).step(1).onChange(setValue).onChange(ResetDefault);
-  PinFolder.add(CFG,'Pin1Code').min(1).max(8).step(1).onChange(setValue);
-  PinFolder.add(CFG,'Pin2Code').min(1).max(8).step(1).onChange(setValue);
-  PinFolder.add(CFG,'Pin3Code').min(1).max(8).step(1).onChange(setValue);
-  PinFolder.add(CFG,'Pin4Code').min(1).max(8).step(1).onChange(setValue);
-  PinFolder.add(CFG,'Pin5Code').min(1).max(8).step(1).onChange(setValue);
-  PinFolder.add(CFG,'Pin6Code').min(1).max(8).step(1).onChange(setValue);
-  PinFolder.add(CFG,'Pin7Code').min(1).max(8).step(1).onChange(setValue);
+  PinFolder.add(CFG,'PinCount').min(4).max(8).step(1).onChange(setValue);
+  PinFolder.add(CFG,'PinDepths').min(4).max(10).step(1).onChange(setValue);
+  
+  var CodeFolder = ConfigGUI.addFolder('Code');
+  CodeFolder.add(CFG,'Pin1Code').min(1).max(10).step(1).onChange(setValue);
+  CodeFolder.add(CFG,'Pin2Code').min(1).max(10).step(1).onChange(setValue);
+  CodeFolder.add(CFG,'Pin3Code').min(1).max(10).step(1).onChange(setValue);
+  CodeFolder.add(CFG,'Pin4Code').min(1).max(10).step(1).onChange(setValue);
+  CodeFolder.add(CFG,'Pin5Code').min(1).max(10).step(1).onChange(setValue);
+  CodeFolder.add(CFG,'Pin6Code').min(1).max(10).step(1).onChange(setValue);
+  CodeFolder.add(CFG,'Pin7Code').min(1).max(10).step(1).onChange(setValue);
 
 
   setValue();
@@ -380,25 +370,25 @@ PCMT1 = two.makeText (CFG.MeasureSize / 100 + "cm", GESLEN - 50 ,10);PCMT1.size 
 
 if (CFG.showKeyMeasure == true) {
 // Shaft-Länge
-var PTT = two.makeLine (SL,ST,SL + (CFG.ShaftLength / 10) + (10-1) * 20,ST);PTT.stroke = 'lightgray';two.add (PTT);                       // Pin-Tiefe Top
-var PTB = two.makeLine (SL,SB,SL + (CFG.ShaftLength / 10) + (10-1) * 20,SB);PTB.stroke = 'lightgray';two.add (PTB);                       // Pin-Tiefe Bot
+var PTT = two.makeLine (SL,ST,SL + (CFG.ShaftLength / 10) + (12-1) * 20,ST);PTT.stroke = 'lightgray';two.add (PTT);                       // Pin-Tiefe Top
+var PTB = two.makeLine (SL,SB,SL + (CFG.ShaftLength / 10) + (12-1) * 20,SB);PTB.stroke = 'lightgray';two.add (PTB);                       // Pin-Tiefe Bot
 var PTV = two.makeLine (SL,SB * 2,SL + (CFG.ShaftLength / 10),SB * 2);PTV.stroke = 'lightgray';two.add (PTV);                                      // Verbinder
 var PWL = two.makeLine (SL,ST,SL,SB * 2);PWL.stroke = 'lightgray';two.add (PWL);
 var PWR = two.makeLine (SR,ST + (CFG.TipHeigth / 10),SR,SB * 2);PWR.stroke = 'lightgray';two.add (PWR);
-var PWV = two.makeLine (SL + (CFG.ShaftLength / 10) + (10-1) * 20,ST,SL + (CFG.ShaftLength / 10) + (10-1) * 20,SB);PWV.stroke = 'lightgray';two.add (PWV);
-var PWT = two.makeText ((CFG.ShaftHeigth), SL + 8 + (CFG.ShaftLength / 10) + (10-1) * 20 ,ST + CFG.ShaftHeigth / 20);PWT.size = '10'
+var PWV = two.makeLine (SL + (CFG.ShaftLength / 10) + (12-1) * 20,ST,SL + (CFG.ShaftLength / 10) + (12-1) * 20,SB);PWV.stroke = 'lightgray';two.add (PWV);
+var PWT = two.makeText ((CFG.ShaftHeigth), SL + 10 + (CFG.ShaftLength / 10) + (12-1) * 20 ,ST + CFG.ShaftHeigth / 20);PWT.size = '10'
  
 LineTXT = two.makeText (CFG.ShaftLength,SL + (CFG.ShaftLength / 20), (SB * 2) - 5);LineTXT.size = '10'
  
 // -------------------------------------------
 // Debug Pin-Heights
 // -------------------------------------------
-for (var i = 1; i <= 8; i++) {
-            PH = SB - CFG.PinHeight - ((i - 1) * CFG.PinIncrease);                                                                          // Pin-Hoehe bei Zähler I
-            PW = SL + (CFG.ShaftLength / 10) + (10-i-1) * 20                                                                                                                 // Weite des Strichs
-            PH1 = two.makeLine (SL,PH,PW,PH);PH1.stroke  = 'lightgray';two.add (PH1);
-            PHB1 = two.makeLine (PW,PH,PW,ST);PHB1.stroke  = 'lightgray';two.add (PHB1);
-            PHT1 = two.makeText ( i + ':' + ((ST - PH) * -10).toFixed(0),PW +5,ST +15 );PHT1.size = '8'; PHT1.rotation = 90 * (Math.PI/180);   
+for (var i = 1; i <= CFG.PinDepths; i++) {
+            PH = SB - CFG.PinHeight - ((i - 1) * CFG.PinIncrease);  // Pin-Hoehe bei Zähler I
+            PW = SL + (CFG.ShaftLength / 10) + (12-i-1) * 20        // Weite des Strichs
+            PH1 = two.makeLine (SL,PH,PW,PH);PH1.stroke  = 'lightgray';two.add (PH1);	// Höhe
+            PHB1 = two.makeLine (PW,PH,PW,ST);PHB1.stroke  = 'lightgray';two.add (PHB1); // Nach unten
+            PHT1 = two.makeText ( i + ':' + ((ST - PH) * -12).toFixed(0),PW +5,ST +15 );PHT1.size = '8'; PHT1.rotation = 90 * (Math.PI/180);   
 
             if (i == 4) {
             PX1 = two.makeLine (SL,PH,SL-20,PH);PX1.stroke  = 'gray';two.add (PX1);
